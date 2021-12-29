@@ -4,6 +4,58 @@ import Layout, { siteTitle } from "../components/layout";
 import Date from "../components/date";
 import utilStyles from "../styles/utils.module.css";
 import { getSortedPostsData } from "../lib/posts";
+import useSWR from "swr";
+import { request, gql } from "graphql-request";
+
+const query = gql`
+  query getUserProfile($username: String!) {
+    allQuestionsCount {
+      difficulty
+      count
+    }
+    matchedUser(username: $username) {
+      submitStats {
+        acSubmissionNum {
+          difficulty
+          count
+          submissions
+        }
+        totalSubmissionNum {
+          difficulty
+          count
+          submissions
+        }
+      }
+      profile {
+        ranking
+        reputation
+        starRating
+        userAvatar
+      }
+    }
+  }
+`;
+
+const requestHeaders = {
+  "Access-Control-Allow-Origin": "http://localhost:3000",
+  "Access-Control-Allow-Credentials": "true",
+};
+
+const fetcher = (query) =>
+  request(
+    "https://obscure-escarpment-76911.herokuapp.com/https://leetcode.com/graphql",
+    query,
+    "weichun0911",
+    requestHeaders
+  ).then((res) => res.json());
+
+function Profile() {
+  const { data, error } = useSWR(query, fetcher);
+
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
+  return <div>hello!</div>;
+}
 
 export async function getStaticProps() {
   const allPostsData = getSortedPostsData();
@@ -27,10 +79,10 @@ export default function Home({ allPostsData }) {
           the ability to quickly learn new things and adapt to different
           environments.
         </p>
-        <p>
-          (This is a sample website - you’ll be building a site like this on{" "}
-          <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
-        </p>
+      </section>
+      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+        <h2 className={utilStyles.headingLg}>Ego Wall</h2>
+        <Profile />
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
