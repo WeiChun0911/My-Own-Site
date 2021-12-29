@@ -1,0 +1,76 @@
+#background {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  fill: #292a2b;
+}
+.total-solved-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  color: #9e9e9e;
+  height: 33px;
+}
+.stat-wrapper {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+}
+.problemsSolved {
+  color: "#BE90F2";
+  font-size: 12px;
+  line-height: 17px;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.total-solved-count {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 100%;
+  white-space: nowrap;
+  color: #cfccc7;
+  font-size: 22px;
+}
+.difficulty-label {
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 17px;
+  margin-bottom: 2px;
+  white-space: nowrap;
+}
+.easy {
+  color: "rgb(67, 160, 71)";
+}
+.medium {
+  color: "rgb(251, 140, 0)";
+}
+.hard {
+  color: "rgb(233, 30, 99)";
+}
+.total-solved-container .total-count::before {
+  content: "/";
+  margin: 0 1px;
+}
+.total-solved-container .total-count {
+  color: #7a807c;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+}
+.solved {
+  color: #cfccc7;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 100%;
+  white-space: nowrap;
+}
+.top {
+  height: 108px;
+}
+foreignObject {
+  width: calc(100% - 10px - 32px);
+  height: calc(100% - 10px - 24px);
+}
