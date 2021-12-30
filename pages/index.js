@@ -23,11 +23,10 @@ export default function Home({ allPostsData }) {
       </Head>
 
       <section className={utilStyles.headingMd}>
+        <p> Hi, I'm Willy. </p>
         <p>
-          3 years of full-end development experience, love to learn and apply
-          various technologies. Familiar with agile development process. Have
-          the ability to quickly learn new things and adapt to different
-          environments.
+          This is my personal website. Hopefully, I will start bloging here in
+          the near future.
         </p>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>

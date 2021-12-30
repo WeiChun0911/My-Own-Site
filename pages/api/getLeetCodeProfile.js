@@ -20,5 +20,5 @@ const query = `
 export default function handler(req, res) {
   request("https://leetcode.com/graphql", query, {
     username: "weichun0911",
-  }).then((data) => res.status(200).json({ data }));
+  }).then((data) => res.status(200).json(data));
 }
