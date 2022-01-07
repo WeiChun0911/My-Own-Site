@@ -5,6 +5,7 @@ import Date from "../components/date";
 import utilStyles from "../styles/utils.module.css";
 import { getSortedPostsData } from "../lib/posts";
 import LeetCodeProfile from "../components/leetCodeProfile";
+import StackOverflowProfile from "../components/stackOverflowProfile";
 
 export async function getStaticProps() {
   const allPostsData = getSortedPostsData();
@@ -31,7 +32,10 @@ export default function Home({ allPostsData }) {
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Ego Wall</h2>
-        <LeetCodeProfile />
+        <>
+          <LeetCodeProfile />
+          <StackOverflowProfile />
+        </>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>

@@ -1,0 +1,41 @@
+.bronze {
+  color: #d1a684;
+}
+
+.badge-count-bronze::after {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 5px;
+  border-radius: 100%;
+  background: #d1a684;
+}
+
+.silver {
+  color: #b4b8bc;
+}
+
+.badge-count-silver::after {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 5px;
+  border-radius: 100%;
+  background: #b4b8bc;
+}
+
+.gold {
+  color: #ffcc01;
+}
+
+.badge-count-gold::after {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 5px;
+  border-radius: 100%;
+  background: #ffcc01;
+}
