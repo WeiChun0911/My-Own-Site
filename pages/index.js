@@ -4,8 +4,7 @@ import Layout, { siteTitle } from "../components/layout";
 import Date from "../components/date";
 import utilStyles from "../styles/utils.module.css";
 import { getSortedPostsData } from "../lib/posts";
-import LeetCodeProfile from "../components/leetCodeProfile";
-import StackOverflowProfile from "../components/stackOverflowProfile";
+import EgoWall from "../components/egoWall/egoWall";
 
 export async function getStaticProps() {
   const allPostsData = getSortedPostsData();
@@ -18,7 +17,7 @@ export async function getStaticProps() {
 
 export default function Home({ allPostsData }) {
   return (
-    <Layout>
+    <Layout home>
       <Head>
         <title>{siteTitle}</title>
       </Head>
@@ -30,13 +29,9 @@ export default function Home({ allPostsData }) {
           the near future.
         </p>
       </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Ego Wall</h2>
-        <>
-          <LeetCodeProfile />
-          <StackOverflowProfile />
-        </>
-      </section>
+
+      <EgoWall />
+
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
