@@ -1,6 +1,7 @@
 import useSWR from "swr";
-import style from "./leetCodeProfile.module.css";
 import Image from "next/image";
+import style from "./leetCodeProfile.module.css";
+
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function LeetCodeProfile() {
@@ -8,7 +9,7 @@ export default function LeetCodeProfile() {
   if (error) return <div>failed to load</div>;
   if (!data) return <div>Loading...</div>;
   return (
-    <div id={style["background"]}>
+    <div className={style["background"]}>
       <div className={style.upper}>
         <div className={`${style["stat-wrapper"]} ${style["top"]}`} size="108">
           <div className={style["problems-solved"]}>Problems Solved</div>

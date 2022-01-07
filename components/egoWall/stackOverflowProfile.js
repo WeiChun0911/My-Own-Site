@@ -10,7 +10,7 @@ export default function StackOverflowProfile() {
   if (!data) return <div>Loading...</div>;
   data = data.items[0];
   return (
-    <div id={style["background"]}>
+    <div className={style["background"]}>
       <div className={style.upper}>
         <div className={`${style["stat-wrapper"]} ${style["top"]}`} size="108">
           <div className={style["problems-solved"]}>Reputation</div>
