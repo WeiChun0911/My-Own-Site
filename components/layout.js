@@ -62,7 +62,7 @@ export default function Layout({ children, home }) {
         )}
       </header>
 
-      <main>{children}</main>
+      <main className={utilStyles.mainArea}>{children}</main>
 
       {!home && (
         <div className={styles.backToHome}>

@@ -50,3 +50,21 @@
 .lightText {
   color: #666;
 }
+
+/* .mainArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+} */
+
+.blogArea {
+  width: 50rem;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.blogArea > table {
+  border-spacing: 0;
+  border: 2px solid #ff0000;
+}
