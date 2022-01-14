@@ -1,6 +1,9 @@
 import Head from "next/head";
+import { MDXRemote } from "next-mdx-remote";
+import { serialize } from "next-mdx-remote/serialize";
 import Layout from "../../components/layout";
 import Date from "../../components/date";
+import ImageInsideBlog from "../../components/imageInsideBlog";
 import { getAllPostIds, getPostData } from "../../lib/posts";
 import utilStyles from "../../styles/utils.module.css";
 
@@ -14,25 +17,30 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const postData = await getPostData(params.id);
+  const mdxSource = await serialize(postData.content);
   return {
     props: {
-      postData,
+      title: postData.title,
+      date: postData.date,
+      source: mdxSource,
     },
   };
 }
 
-export default function Post({ postData }) {
+const components = { ImageInsideBlog };
+
+export default function Post({ title, date, source }) {
   return (
     <Layout>
       <Head>
-        <title>{postData.title}</title>
+        <title>{title}</title>
       </Head>
       <article>
-        <h1 className={utilStyles.headingXl}>{postData.title}</h1>
+        <h1 className={utilStyles.headingXl}>{title}</h1>
         <div className={utilStyles.lightText}>
-          <Date dateString={postData.date} />
+          <Date dateString={date} />
+          <MDXRemote {...source} components={components} />
         </div>
-        <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
       </article>
     </Layout>
   );
