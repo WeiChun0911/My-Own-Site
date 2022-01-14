@@ -4,15 +4,13 @@ import "react-medium-image-zoom/dist/styles.css";
 
 export default function ImageInsideBlog({ ...props }) {
   return (
-    <div>
-      <Zoom>
-        <Image
-          src={props.src}
-          alt="image"
-          width={props.width}
-          height={props.height}
-        ></Image>
-      </Zoom>
-    </div>
+    <Zoom>
+      <Image
+        src={props.src}
+        alt="image"
+        width={props.width}
+        height={props.height}
+      ></Image>
+    </Zoom>
   );
 }
