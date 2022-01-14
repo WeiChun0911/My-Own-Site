@@ -1,17 +1,38 @@
 ---
 title: "How to get end users IP address?"
-date: "2020-01-01"
+date: "2021-10-27"
 ---
 
-在後端的服務中，如果想要取得使用者真正的 IP 該怎麼做呢?
+在 NodeJS 後端服務中，如果想要取得使用者真正的 IP 該怎麼做呢?
 
-1. x-real-ip / x-forwarded-for / remoteAddress 之間的差異
-2. 我們要如何取得使用者真正的 IP ?
+**1. x-real-ip / x-forwarded-for / remoteAddress 之間的差異表**
+
+請先參考以下表格，我整理了幾種可能的答案
 
 <ImageInsideBlog
   src="/images/1027_01.png"
-  alt="stupid"
+  alt="image1"
   height={289}
   width={1459}
   layout="intrinsic"
 />
+
+**2. 所以實務上，我們該如何做呢?**
+
+由上表，我們可以知道，
+x-real-ip 與 x-forwarded-for 都有機會被偽造，或是被改成非預期的值，因此:
+
+1. 如果使用者是直連服務: **使用 remoteAddress**
+2. 如果中間會通過 proxy ，則無法保證取到的 IP 是正確的<br/>
+   你只能 :
+   - 祈禱大家都好好的按照 RFC-7239#section-5.2 的規定
+   - 並且謹慎小心的使用 x-forwarded-for
+
+**3. 驗證想法，參考 golang 的 gin **
+
+1. gin 是 golang 的網頁框架，他提供了 ClientIP 方法來取得使用者 IP
+
+   1. 請參考官方文件對於 ClientIP 的說明:<br/> https://pkg.go.dev/github.com/gin-gonic/gin#Context.ClientIP
+   2. 文件裡提到的邏輯與我們的想法大致相同，
+      1. 「假如通過的 proxy 是可以信任的」<br/>他就會使用 [X-Forwarded-For, X-Real-Ip]
+      2. 否則就會用 remoteAddress
