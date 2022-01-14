@@ -1,0 +1,78 @@
+---
+title: "What is protocal buffer, and how to use it?"
+date: "2021-11-14"
+---
+
+# Protocol Buffer
+
+> like XML, but smaller, faster, and simpler. --- Google
+
+## 1. 看完這篇文章，你可以知道:
+
+1. (What) Protocol Buffer **是什麼**
+2. (Why) **為什麼用**
+3. (Where) **用在哪**
+4. (How) **怎麼用**
+
+## 2. 什麼是 Protocol Buffer?
+
+他是一種資料序列化的機制，就像 JSON 一樣。**就這樣**。
+
+| javascript                                                                        | Go                                                                                |
+| --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| <ImageInsideBlog src="https://i.imgur.com/mZUidbm.png" width={427} height={167}/> | <ImageInsideBlog src="https://i.imgur.com/otpTG6G.png" width={414} height={215}/> |
+
+| javascript       | type   | console output   |
+| ---------------- | ------ | ---------------- |
+| serializedData   | String | {"Name":"Willy"} |
+| deserializedData | Object | {Name: 'Willy'}  |
+
+| Go               | type            | console output                 |
+| ---------------- | --------------- | ------------------------------ |
+| serializedData   | []uint8         | [10 5 87 105 108 108 121 16 1] |
+| deserializedData | \*person.Person | name:"Willy"                   |
+
+## 3. 為什麼要用 Protocol Buffer?
+
+使用 Protocol Buffer 的方式和理由百百種，以下僅列出兩項最根本的原因:
+
+1. Protocol Buffer 資料序列化的時間**比 JSON 短**
+2. 序列化之後的資料**比 JSON 小**
+
+## 4. Protocol Buffer 可以用在哪?
+
+只要有資料的地方，就可以考慮使用 protocol buffer。
+以下列出可以應用 Protocol Buffer 的地方:
+
+1. 前端 <--> 後端
+   1. [gRPC by Google](https://www.grpc.io/docs/)
+2. 後端 <--> 後端(常見在微服務架構中)
+
+3. 後端 <--> 資料庫
+   1. [DataForm 的黑科技](https://dataform.co/blog/mongodb-protobuf-codec)
+   2. [mysql-protobuf](https://github.com/google/mysql-protobuf/wiki)
+4. 用來作為資料結構管理工具
+
+## 5. Protocol Buffer 怎麼用?
+
+不管應用在哪、如何應用，Protocol Buffer 的基礎使用步驟有以下 5 步:
+
+1. [定義 Message](https://hackmd.io/idI5BcajR9qi5KB6RhbSZw)
+2. [使用 protocol buffer compiler 編譯 Message](https://hackmd.io/xlx1QwysTkee3rveDt4FsQ)，產出各語言(Go, C#, Java...)可以使用的類別
+3. import "google.golang.org/protobuf/proto";
+
+
+4. import 編譯後產生的類別(.pb.go file)
+
+
+5. 即可針對資料進行序列化/反序列化
+
+你可以參考這個[練習用的專案](https://github.com/WeiChun0911/protobuf-lab)
+
+## 6. 資料來源
+
+1. [Google 官方文件](https://developers.google.com/protocol-buffers)
+2. [Hussein Nasser 的 Youtube 影片](https://www.youtube.com/watch?v=46O73On0gyI)
+3. [Auth0 Blog](https://auth0.com/blog/beating-json-performance-with-protobuf/)
+4. [初識 Protocol Buffers | Peng Jie's Blog](https://jiepeng.me/2018/07/25/protocol-buffers-intro)
+5. [Yami.io](https://yami.io/protobuf/)
