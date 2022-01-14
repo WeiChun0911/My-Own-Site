@@ -8,13 +8,14 @@ export default function StackOverflowProfile() {
   const { data, error } = useSWR("/api/getStackOverflowProfile", fetcher);
   if (error) return <div>failed to load</div>;
   if (!data) return <div>Loading...</div>;
-  data = data.items[0];
   return (
     <div className={style["background"]}>
       <div className={style.upper}>
         <div className={`${style["stat-wrapper"]} ${style["top"]}`} size="108">
           <div className={style["problems-solved"]}>Reputation</div>
-          <div className={style["total-solved-count"]}>{data.reputation}</div>
+          <div className={style["total-solved-count"]}>
+            {data.items[0].reputation}
+          </div>
         </div>
         <a
           className={style.logo}
@@ -26,7 +27,7 @@ export default function StackOverflowProfile() {
             src="/images/stackOverflowLogo.png"
             height={372}
             width={1866}
-            alt={name}
+            alt={"stackOverflowLogo.png"}
           />
         </a>
       </div>
@@ -41,7 +42,7 @@ export default function StackOverflowProfile() {
           <div
             className={`${style["solved"]} ${stackOverflowProfileStyle["badge-count-bronze"]}`}
           >
-            {data.badge_counts.bronze}
+            {data.items[0].badge_counts.bronze}
           </div>
         </div>
         <div className={style["stat-wrapper"]}>
@@ -53,7 +54,7 @@ export default function StackOverflowProfile() {
           <div
             className={`${style["solved"]} ${stackOverflowProfileStyle["badge-count-silver"]}`}
           >
-            {data.badge_counts.silver}
+            {data.items[0].badge_counts.silver}
           </div>
         </div>
         <div className={style["stat-wrapper"]}>
@@ -65,7 +66,7 @@ export default function StackOverflowProfile() {
           <div
             className={`${style["solved"]} ${stackOverflowProfileStyle["badge-count-gold"]}`}
           >
-            {data.badge_counts.gold}
+            {data.items[0].badge_counts.gold}
           </div>
         </div>
       </div>
