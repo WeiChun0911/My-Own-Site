@@ -1,13 +1,25 @@
 ---
-title: "How to get end users IP address?"
+title: "How to get end user's IP address?"
 date: "2020-01-01"
 ---
 
 import Image from "next/image";
 
-在後端的服務中，如果想要取得使用者真正的 IP 該怎麼做呢?
+分享我從工作上的 bug 中得到的新知
 
-1. x-real-ip / x-forwarded-for / remoteAddress 之間的差異
-2. 我們要如何取得使用者真正的 IP ?
+### 1. x-real-ip / x-forwarded-for / remoteAddress 之間的差異
 
-<Image src="/images/1027_01.png" alt="stupid" height={289} width={1459} />
+在嘗試取得 IP 的時候，通常有上述這幾個選擇，那到底哪一個是正確的呢? <br/>以下列出三者之間的差異:
+
+|                        | 資料來源         | 官方文件說明                                                                                                                                                                                            | 用途                                                                         |     |
+| ---------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | --- |
+| **1. x-real-ip**       | http header      | 使用者自定義的 header，沒有官方說明                                                                                                                                                                     | 通常(一種共識，就像九二共識)，被 HTTP 代理用來表示與它產生 TCP 連接的設備 IP |     |
+| **2. x-forwarded-for** | http header      | The X-Forwarded-For (XFF) header is a de-facto standard header for identifying the originating IP address of a client connecting to a web server through an HTTP proxy or a load balancer.              | 通常(按照 RFC-7239#section-5.2 的規定)，應該要用來表示 HTTP 請求端的設備 IP  |     |
+| **3. remoteAddress**   | node js 底層處理 | The string representation of the remote IP address. For example, '74.125.127.100' or '2001:4860:a005::68'. Value may be undefined if the socket is destroyed (for example, if the client disconnected). | 一定是用來表示與服務端建立 TCP 連接的設備 IP                                 |     |
+
+### 2. 我們要如何取得使用者真正的 IP ?
+
+1. 如果使用者可以直連服務: **使用 remoteAddress**
+2. 如果不是直連: 你沒辦法【保證】取到的使用者 IP 是正確的，你只能:
+   1. 祈禱大家都好好的按照 RFC-7239#section-5.2 的規定
+   2. 謹慎小心的使用 x-forwarded-for
