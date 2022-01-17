@@ -6,6 +6,11 @@ import Date from "../../components/date";
 import ImageInsideBlog from "../../components/imageInsideBlog";
 import { getAllPostIds, getPostData } from "../../lib/posts";
 import utilStyles from "../../styles/utils.module.css";
+import { refractor } from "refractor/lib/core.js";
+import go from "refractor/lang/go.js";
+import rehypePrismGenerator from "rehype-prism-plus/generator";
+refractor.register(go);
+const myPrismPlugin = rehypePrismGenerator(refractor);
 
 export async function getStaticPaths() {
   const paths = getAllPostIds();
@@ -17,7 +22,9 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const postData = await getPostData(params.id);
-  const mdxSource = await serialize(postData.content);
+  const mdxSource = await serialize(postData.content, {
+    mdxOptions: { rehypePlugins: [myPrismPlugin] },
+  });
   return {
     props: {
       title: postData.title,
