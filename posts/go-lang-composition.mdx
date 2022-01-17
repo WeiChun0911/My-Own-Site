@@ -1,0 +1,95 @@
+---
+title: "Learning Go - Composition(embedded)"
+date: "2021-12-13"
+---
+
+**1. 前言**
+
+我想要從 middleware 裡面把 responsebody 還有 responseStatus 錄起來放到 DB 裡
+參考了這邊文章: https://stackoverflow.com/questions/38501325/how-to-log-response-body-in-gin
+功能都做完了，也都沒問題
+結果 R 同事分享了這篇文章: https://ppfocus.com/mo/0/di556a981.html
+
+根據文章，使用這個範例， ctx.String 會壞掉，但 ctx.JSON 會是好的
+但我的行為和他的不一樣
+所以我和這邊文章一樣開始追底層設計
+順便想搞懂到底是怎麼運作的
+
+**2. 背景介紹**
+
+1. 我畫了 gin/gin, gin/render 與 http/http 的 UML 關係圖
+
+<ImageInsideBlog
+  src="/images/1213_01.png"
+  alt="image1"
+  height={641}
+  width={1831}
+/>
+
+2. 我實作的 middleware 原始碼
+
+```golang
+package middleware
+
+import (
+	"bytes"
+	"???/pkg/???"
+	"io/ioutil"
+
+	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
+)
+
+type responseBodyWriter struct {
+	gin.ResponseWriter
+	body   *bytes.Buffer
+	status int
+}
+
+func (r *responseBodyWriter) WriteHeader(status int) {
+	r.status = status
+	r.ResponseWriter.WriteHeader(status)
+}
+func (r responseBodyWriter) Write(b []byte) (int, error) {
+	r.body.Write(b)
+	return r.ResponseWriter.Write(b)
+}
+
+func ???(auditLog *???.???) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+
+		bodyBytes, _ := ioutil.ReadAll(ctx.Request.Body)
+		ctx.Request.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
+
+		w := &responseBodyWriter{body: &bytes.Buffer{}, ResponseWriter: ctx.Writer}
+		ctx.Writer = w
+		ctx.Next()
+
+		logErr := ???.???(w.status, ctx.Request.URL.Path, ctx.Request.Method, string(bodyBytes), w.body.String(), ctx)
+		if logErr != nil {
+			log.Err(logErr).Msgf("??? failed ")
+		}
+
+	}
+}
+```
+
+**2. 所以實務上，我們該如何做呢 ?**
+
+由上表，我們可以知道，
+x-real-ip 與 x-forwarded-for 都有機會被偽造，或是被改成非預期的值，因此:
+
+1. 如果使用者是直連服務: **使用 remoteAddress**
+2. 如果中間會通過 proxy ，則無法保證取到的 IP 是正確的<br/>
+   你只能 :
+   - 祈禱大家都好好的按照 RFC-7239#section-5.2 的規定
+   - 並且謹慎小心的使用 **x-forwarded-for**
+
+**3. 驗證想法，參考 golang 的 gin **
+
+1. gin 是 golang 的網頁框架，他提供了 ClientIP 方法來取得使用者 IP。
+
+   1. 請參考官方文件對於 ClientIP 的說明:<br/> https://pkg.go.dev/github.com/gin-gonic/gin#Context.ClientIP
+   2. 文件裡提到的邏輯與我們的想法大致相同，
+      1. 「假如通過的 proxy 是可以信任的」<br/>他就會使用 [X-Forwarded-For, X-Real-Ip]
+      2. 否則就會用 remoteAddress
